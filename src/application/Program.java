@@ -2,6 +2,8 @@ package application;
 
 import java.util.Date;
 
+import model.dao.DaoFactory;
+import model.dao.VendedorDao;
 import model.entities.Departamento;
 import model.entities.Vendedor;
 
@@ -9,18 +11,11 @@ public class Program {
 
 	public static void main(String[] args) {
 		
-		Departamento obj = new Departamento(1, "Informática");
+		VendedorDao vendedorDao = DaoFactory.createVendedorDao();  // Instancia o VendedorDao
 		
-		System.out.println("Departamentos");
-		System.out.println(obj);
+		Vendedor vendedor = vendedorDao.findById(3);               // Variável vendedor recebe a função retornar vendedor por id
 		
-		System.out.println("=====================================");
-		
-		Vendedor vend = new Vendedor(1, "Ronan Soares", "ronan@gmail.com", new Date(), 3000.0, obj);
-		
-		System.out.println("Vendedores");
-		System.out.println(vend);
-
+		System.out.println(vendedor);
+	
 	}
-
 }
