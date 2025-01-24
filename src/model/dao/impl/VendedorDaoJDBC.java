@@ -58,22 +58,13 @@ public class VendedorDaoJDBC implements VendedorDao{
 			
 			ps.setInt(1, id);                                    // 1 Interrogação recebe o id do parâmetro da função findById.
 			rs = ps.executeQuery();                              // rs recebe a execução do cmdo SQL. Apesar de pega em forma de tbl. Tem q transformar em obj
-			
-			if(rs.next()) {                              // Se o rs.next der falso (Não retornou nada). Não tem vendedor com o id informado.
-				Departamento dep = new Departamento();   // Instancia Departamento (Para transformar rs - tbl em obj)
-				dep.setIdDep(rs.getInt("DepartmentId")); // Seta no obj dep o Id do DepartmentId.
-				dep.setNomeDep(rs.getString("DepName")); // Seta no obj dep o Nome do Departamento
+			if(rs.next()) {                                     // Se o rs.next der falso (Não retornou nada). Não tem vendedor com o id informado.
 				
-				Vendedor vend = new Vendedor();          // Instancia o Vendedor
-				vend.setIdVend(rs.getInt("Id"));         // Seta o Id no obj vend
-				vend.setNomeVend(rs.getString("Name"));  // Seta o Nome no obj vend
-				vend.setEmail(rs.getString("Email"));
-				vend.setSalarioBase(rs.getDouble("BaseSalary"));
-				vend.setDataAniversario(rs.getDate("BirthDate"));
-				
-				vend.setDepartamento(dep);    // Associação entre os obj Departamento e Vendedor
-				
-				return vend;                  // Retorna o obj vend 				
+				// CRIA FUNÇÃO  DAS INSTANCIAÇÕES PARA REUTILIZAÇÃO DOS CÓDIGOS	
+				Departamento dep = instantiateDepartment(rs);   // Chama o método
+				Vendedor vend = instanciateVendedor(rs, dep);   // Chama o método inst..Ven..
+				vend.setDepartamento(dep);                      // Associação entre os obj Departamento e Vendedor
+				return vend;                                    // Retorna o obj vend 				
 			}			
 			return null;       // Pula o if e retorna nulo.			
 		}
@@ -86,6 +77,23 @@ public class VendedorDaoJDBC implements VendedorDao{
 			DB.closeResultSet(rs);
 			// DB.closeConnection();  Não fecha a conexão, pois pode usar o dao para fazer outras operações. (Fecha a conexão no Prog principal)
 		}
+	}
+	private Vendedor instanciateVendedor(ResultSet rs, Departamento dep) throws SQLException {
+		Vendedor vend = new Vendedor();          // Instancia o Vendedor
+		vend.setIdVend(rs.getInt("Id"));         // Seta o Id no obj vend
+		vend.setNomeVend(rs.getString("Name"));  // Seta o Nome no obj vend
+		vend.setEmail(rs.getString("Email"));
+		vend.setSalarioBase(rs.getDouble("BaseSalary"));
+		vend.setDataAniversario(rs.getDate("BirthDate"));
+		return vend;
+	}
+
+	// Cria a função para instanciar os objetos
+	private Departamento instantiateDepartment(ResultSet rs) throws SQLException {
+		Departamento dep = new Departamento();   // Instancia
+		dep.setIdDep(rs.getInt("DepartmentId")); // Seta no obj dep o Id do DepartmentId.
+		dep.setNomeDep(rs.getString("DepName")); // Seta no obj dep o Nome do Departamento
+		return dep;	
 	}
 
 	@Override

@@ -12,9 +12,9 @@ public class Program {
 	public static void main(String[] args) {
 		
 		VendedorDao vendedorDao = DaoFactory.createVendedorDao();  // Instancia o VendedorDao
-		
+ 
+		System.out.println("==== TESTE 1: Vendedor Busca por Id ====");
 		Vendedor vendedor = vendedorDao.findById(3);               // Variável vendedor recebe a função retornar vendedor por id
-		
 		System.out.println(vendedor);
 	
 	}
